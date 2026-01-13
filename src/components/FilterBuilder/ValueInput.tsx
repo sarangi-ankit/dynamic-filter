@@ -27,7 +27,9 @@ const ValueInput = ({ filter, onUpdate }: Props) => {
  
   if (filter.type === "number") {
     if (filter.operator === "between") {
-      const [min, max] = filter.value || [];
+      const [min, max] = Array.isArray(filter.value)
+  ? (filter.value as [number | undefined, number | undefined])
+  : [undefined, undefined];
 
       return (
         <Stack direction="row" spacing={1}>
@@ -102,36 +104,43 @@ const ValueInput = ({ filter, onUpdate }: Props) => {
 
   
   if (filter.type === "multiSelect") {
-    const selectedValues = filter.value || [];
+  const selectedValues: string[] = Array.isArray(filter.value)
+    ? filter.value.filter((v): v is string => typeof v === "string")
+    : [];
 
-    return (
-      <TextField
-        select
-        label="Value"
-        SelectProps={{ multiple: true }}
-        value={selectedValues}
-        onChange={e =>
-          onUpdate(filter.id, {
-            value: typeof e.target.value === "string"
+  return (
+    <TextField
+      select
+      label="Value"
+      SelectProps={{ multiple: true }}
+      value={selectedValues}
+      onChange={e =>
+        onUpdate(filter.id, {
+          value:
+            typeof e.target.value === "string"
               ? e.target.value.split(",")
               : e.target.value,
-          })
-        }
-        sx={{ minWidth: 180 }}
-      >
-        {fieldConfig.options?.map(opt => (
-          <MenuItem key={opt} value={opt}>
-            <Checkbox checked={selectedValues.includes(opt)} />
-            {opt}
-          </MenuItem>
-        ))}
-      </TextField>
-    );
-  }
+        })
+      }
+      sx={{ minWidth: 180 }}
+    >
+      {fieldConfig.options?.map((opt: string) => (
+        <MenuItem key={opt} value={opt}>
+          <Checkbox checked={selectedValues.includes(opt)} />
+          {opt}
+        </MenuItem>
+      ))}
+    </TextField>
+  );
+}
+
 
   
   if (filter.type === "date") {
-    const [start, end] = filter.value || [];
+    const [start, end] = Array.isArray(filter.value)
+  ? (filter.value as [string | undefined, string | undefined])
+  : [undefined, undefined];
+
 
     return (
       <Stack direction="row" spacing={1}>
