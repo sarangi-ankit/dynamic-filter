@@ -2,7 +2,7 @@ Dynamic Filter Builder
 
 A client-side Dynamic Filter Builder built with React, TypeScript, and Material UI, supporting filtering of multiple data types with real-time updates.
 
-Live Demo- 
+Live Demo- https://dynamic-filter-564m-qk4jb6lrx-ankit-sarangis-projects.vercel.app/
 
 Features
 
@@ -37,11 +37,7 @@ Start the React app
 npm run dev
 
 API Example
-// src/api/employeesApi.ts
-export const fetchEmployees = async () => {
-  const res = await fetch("http://localhost:4000/employees");
-  return res.json();
-};
+
 
 Example Filter
 {
